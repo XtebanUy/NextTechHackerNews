@@ -1,0 +1,28 @@
+.form-container mat-form-field + mat-form-field {
+    margin-left: 8px;
+  }
+  
+  .form-container mat-form-field {
+    width: 220px;
+    min-width: 220px;
+  }
+  
+  .form-container form {
+    margin-bottom: 20px;
+  }
+  
+  .form-container form > * {
+    margin: 12px 0;
+  }
+
+  
+  .form-fields {
+    display: flex;
+    align-items: flex-start;
+    flex-wrap: wrap;
+  }
+  
+
+  .form-container mat-form-field + button {
+    margin-left: 8px;
+  }

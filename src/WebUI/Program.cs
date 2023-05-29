@@ -1,5 +1,6 @@
 using Flurl.Http.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using NextTech.Application.Interfaces;
 using NextTech.Infrastructure.Services;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -11,14 +12,17 @@ builder.Services.AddControllersWithViews();
 
 
 builder.Services.AddOpenApiDocument(configure =>
-        {
-            configure.Title = "NextTech API";
-        });
+{
+    configure.Title = "NextTech API";
+});
 
 builder.Services.AddInfraestructureSevices(builder.Configuration);
 builder.Services.AddApplicationServices();
 
 var app = builder.Build();
+
+await LoadStories(app);
+
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
@@ -46,3 +50,10 @@ app.MapControllerRoute(
 app.MapFallbackToFile("index.html");
 
 app.Run();
+
+static async Task LoadStories(WebApplication app)
+{
+    var scope = app.Services.CreateScope();
+    IRepositoryService repositoryService = scope.ServiceProvider.GetRequiredService<IRepositoryService>();
+    await repositoryService.GetStoriesFromApi();
+}

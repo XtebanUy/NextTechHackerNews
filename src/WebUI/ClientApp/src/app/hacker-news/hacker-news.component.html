@@ -1,0 +1,85 @@
+<div class="form-container">
+    <form [formGroup]="form" (ngSubmit)="onSubmit()">
+        <div class="form-fields">
+            <mat-form-field>
+                <mat-label>Title</mat-label>
+                <input matInput formControlName="title">
+            </mat-form-field>
+
+            <mat-form-field>
+                <mat-label>Min Score</mat-label>
+                <input type="text" matInput formControlName="minScore">
+            </mat-form-field>
+            <mat-form-field>
+                <mat-label>Max Score</mat-label>
+                <input type="text" matInput formControlName="maxScore">
+            </mat-form-field>
+
+            <mat-form-field>
+                <mat-label>Min date</mat-label>
+                <input matInput [matDatepicker]="mindatepicker" formControlName="minDate">
+                <mat-hint>MM/DD/YYYY</mat-hint>
+                <mat-datepicker-toggle matIconSuffix [for]="mindatepicker"></mat-datepicker-toggle>
+                <mat-datepicker #mindatepicker></mat-datepicker>
+            </mat-form-field>
+
+            <mat-form-field>
+                <mat-label>Max date</mat-label>
+                <input matInput [matDatepicker]="maxdatepicker" formControlName="maxDate">
+                <mat-hint>MM/DD/YYYY</mat-hint>
+                <mat-datepicker-toggle matIconSuffix [for]="maxdatepicker"></mat-datepicker-toggle>
+                <mat-datepicker #maxdatepicker></mat-datepicker>
+            </mat-form-field>
+
+            <button mat-raised-button color="accent" type="submit">Search</button>
+
+        </div>
+
+    </form>
+</div>
+<div class="mat-elevation-z8">
+    <table mat-table [dataSource]="dataSource">
+
+        <ng-container matColumnDef="id">
+            <th mat-header-cell *matHeaderCellDef> Id </th>
+            <td mat-cell *matCellDef="let element"> {{element.id}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="news">
+            <th mat-header-cell *matHeaderCellDef> News </th>
+            <td mat-cell *matCellDef="let element">
+                <ng-container *ngIf="element.url">
+                    <a [href]="element.url" target="_blank">{{element.title}}</a>
+                </ng-container>
+                <ng-container *ngIf="!element.url">
+                    {{element.title}}
+                </ng-container>
+            </td>
+        </ng-container>
+
+        <ng-container matColumnDef="score">
+            <th mat-header-cell *matHeaderCellDef> Score </th>
+            <td mat-cell *matCellDef="let element"> {{element.score}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="by">
+            <th mat-header-cell *matHeaderCellDef> By </th>
+            <td mat-cell *matCellDef="let element"> {{element.by}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="time">
+            <th mat-header-cell *matHeaderCellDef> Time </th>
+            <td mat-cell *matCellDef="let element"> {{element.time | date:'short'}} </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
+
+
+    <mat-paginator #paginator class="demo-paginator" (page)="handlePageEvent($event)"
+        [length]="(pageInformation | async)?.totalCount || 0" [pageSize]="(pageInformation | async)?.pageSize || 10"
+        [pageSizeOptions]="pageSizeOptions" [pageIndex]="((pageInformation | async)?.pageNumber || 1) - 1"
+        aria-label="Select page">
+    </mat-paginator>
+</div>
